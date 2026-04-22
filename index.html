@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 Birthday PIN Unlock</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 50%, #A5D6A7 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.1;
+            animation: floatHearts 8s infinite linear;
+            color: rgba(255,255,255,0.8);
+        }
+
+        @keyframes floatHearts {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.1; }
+            90% { opacity: 0.1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .main-container {
+            max-width: 450px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 50px 40px;
+            box-shadow: 0 25px 60px rgba(76, 175, 80, 0.4);
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            animation: slideUp 1s ease-out;
+            border: 3px solid rgba(76, 175, 80, 0.3);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            background: linear-gradient(45deg, #2E7D32, #4CAF50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px rgba(76, 175, 80, 0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(76, 175, 80, 0.8)); }
+        }
+
+        .subtitle {
+            color: #2E7D32;
+            font-size: 1.2rem;
+            margin-bottom: 35px;
+            font-weight: 400;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        .input-label {
+            display: block;
+            text-align: left;
+            color: #2E7D32;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .pin-input {
+            width: 100%;
+            padding: 22px 25px;
+            border: 3px solid #E8F5E8;
+            border-radius: 20px;
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 12px;
+            background: white;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+            color: #2E7D32;
+        }
+
+        .pin-input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.2);
+            transform: scale(1.02);
+        }
+
+        .pin-input::placeholder {
+            letter-spacing: normal;
+            font-size: 1.2rem;
+            color: #BDBDBD;
+        }
+
+        .unlock-btn {
+            background: linear-gradient(45deg, #4CAF50, #66BB6A);
+            color: white;
+            border: none;
+            padding: 22px 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 40px rgba(76, 175, 80, 0.4);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .unlock-btn:hover:not(:disabled) {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(76, 175, 80, 0.6);
+        }
+
+        .unlock-btn:active {
+            transform: translateY(-2px);
+        }
+
+        .unlock-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .instruction {
+            color: #4CAF50;
+            font-size: 1rem;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) {
+            .main-container {
+                padding: 40px 25px;
+                margin: 10px;
+            }
+            
+            .pin-input {
+                font-size: 1.6rem;
+                letter-spacing: 6px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-bg" id="heartsBg"></div>
+    
+    <div class="main-container">
+        <h1 class="title">Happiest Birthday</h1>
+        <p class="subtitle">Enter a special 6 digit PIN to reveal the surprise!</p>
+
+        <div class="input-group">
+            <label class="input-label">Our Secret PIN</label>
+            <input type="password" 
+                   class="pin-input" 
+                   id="pinInput" 
+                   placeholder="Enter PIN"
+                   maxlength="6"
+                   minlength="4"
+                   pattern="[0-9]{4,6}">
+        </div>
+
+        <button class="unlock-btn" id="unlockBtn" onclick="unlockBirthday()">
+            🔓 UNLOCK SURPRISE
+        </button>
+
+        <p class="instruction">Press Enter to unlock instantly!</p>
+    </div>
+
+    <script>
+        // PIN is now set to "021425"
+        const CORRECT_PIN = "021425";
+
+        // Floating hearts
+        const heartEmojis = ['💚', '💝', '🌿', '🎂', '🎉', '✨'];
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            document.getElementById('heartsBg').appendChild(heart);
+            setTimeout(() => heart.remove(), 8000);
+        }
+
+        setInterval(createHeart, 800);
+
+        function unlockBirthday() {
+            const pinInput = document.getElementById('pinInput');
+            const pin = pinInput.value.trim();
+            const btn = document.getElementById('unlockBtn');
+
+            if (!pin || pin.length < 4 || pin.length > 6 || !/^\d+$/.test(pin)) {
+                alert('❌ Please enter a valid 4-6 digit PIN!');
+                pinInput.focus();
+                return;
+            }
+
+            // Check if PIN matches "021425"
+            if (pin !== CORRECT_PIN) {
+                alert('Nako love love mali yung pin. Try mo ulet dali! 💚');
+                pinInput.value = '';
+                pinInput.focus();
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '🎉 Yeheey! Wait ka lang mwuahhh...';
+
+            // Create encoded PIN and redirect (keeping original encoding for compatibility)
+            const birthdaySalt = 'BDAY2024LOVE';
+            const timestamp = Date.now().toString(36);
+            const shiftedPin = pin.split('').map(digit => 
+                String.fromCharCode(65 + (parseInt(digit) * 3 + 7) % 26)
+            ).join('');
+            const encoded = btoa(shiftedPin + birthdaySalt + timestamp)
+                .replace(/=/g, '').replace(/\//g, '-').replace(/\+/g, '_');
+
+            // Redirect to birthday page with PIN
+            setTimeout(() => {
+                window.location.href = `letter.html?pin=${encodeURIComponent(encoded)}`;
+            }, 1000);
+        }
+
+        // Input enhancements
+        document.getElementById('pinInput').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            const btn = document.getElementById('unlockBtn');
+            btn.disabled = this.value.length < 4;
+            
+            // Optional: Visual feedback for correct PIN length
+            if (this.value.length === 6 && this.value === CORRECT_PIN) {
+                btn.style.background = 'linear-gradient(45deg, #FF6B6B, #FF8E8E)';
+            } else if (this.value.length === 6) {
+                btn.style.background = 'linear-gradient(45deg, #4CAF50, #66BB6A)';
+            }
+        });
+
+        // Enter key support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.getElementById('pinInput') === document.activeElement) {
+                unlockBirthday();
+            }
+        });
+
+        // Initial button state
+        document.getElementById('unlockBtn').disabled = true;
+    </script>
+</body>
+</html>
